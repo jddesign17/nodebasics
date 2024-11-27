@@ -1,22 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    
+  </head>
+  <body>
     <h2>user side</h2>
 
+    <div id="details"></div>
     <script>
-        async function getData ()
-        {
-            const res = await fetch('http://localhost:3000/get') 
-            console.log(res.json())   
-        }
+      const details = document.getElementById("details");
 
-        getData()
+      async function getData() {
+        const res = await fetch("http://localhost:3000/get");
+        const data = await res.json();
+
+        data.map((user) => {
+          details.innerHTML += `
+          <div>
+            <p>${user.name}</p>
+          <p>${user.age}</p>
+          <p>${user.phone}</p>
+            </div>
+          `;
+        });
+      }
+      getData();
     </script>
-</body>
+  </body>
 </html>
