@@ -15,16 +15,6 @@
       async function getData() {
         const res = await fetch("http://localhost:3000/get");
         const data = await res.json();
-
-        data.map((user) => {
-          details.innerHTML += `
-          <div>
-            <p>${user.name}</p>
-          <p>${user.age}</p>
-          <p>${user.phone}</p>
-            </div>
-          `;
-        });
       }
       getData();
     </script>
