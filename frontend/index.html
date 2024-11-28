@@ -6,46 +6,133 @@
     <title>Document</title>
   </head>
   <body>
-    <h2>user side</h2>
-    <div id="details">
+    <div>
+      <input placeholder="Enter name" type="text" id="username" />
+      <input placeholder="Enter age" type="number" id="age" />
+      <button onclick="submit()">Submit</button>
+      <button onclick="updateuser()">update</button>
 
+      <div id="details"></div>
     </div>
-    <div id="details2">
-
-    </div>
-    <script>
-     
-
-     const details =document.getElementById("details")
-     const details2 =document.getElementById("details2")
-    
-
-      async function getData() {
-        const res = await fetch("http://localhost:3000/get");
-        const data = await res.json();
-        
-        
-        data.map((item,index)=>{
-          details.innerHTML += `<h2>Name : ${item.name}</h2>
-          <p>Age : ${item.age}</p>
-          <p>Phone : ${item.phone}</p>
-          `
-        })
-       
-      }
-
-
-      async function getData2() {
-        const res = await fetch("http://localhost:3000/data");
-        const data = await res.json();
-        
-        details2.innerHTML += `<h2>Name : ${data.name}</h2> `
-        console.log("single data ",data)
-       
-      }
-      getData();
-
-      getData2()
-    </script>
   </body>
+
+  <script>
+
+
+    let userid =""
+    const details = document.getElementById("details");
+
+    // create user
+
+    async function submit() {
+      const username = document.getElementById("username");
+      const age = document.getElementById("age");
+
+      // console.log(data)
+
+      try {
+       
+
+        const response = await fetch("http://localhost:3000/create", {
+          method: "POST",
+          body: JSON.stringify({name:username.value,age:age.value}),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        
+        });
+        const data1 = await response.json();
+        window.location.reload()
+        console.log(data1);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    // create user
+
+
+    // get user
+
+      async function getUser(){
+        try {
+
+          const response = await fetch("http://localhost:3000/read")
+          const data = await response.json()
+       
+          data.map((item)=>{
+            details.innerHTML +=`<div>
+              <h2>${item.username}</h2>
+              <h2>${item.age}</h2>
+              <h2>${item._id}</h2>
+              <button onclick = "update('${item._id}')">edit</button>
+              <button onclick = "deleteuser('${item._id}')">delete</button>
+              </div>
+              `
+          })
+
+          
+        } catch (error) {
+            console.log(error)
+        }
+      }
+
+      getUser()
+
+    // get user
+
+
+   async function update(id){
+      try {
+
+        const user = await fetch(`http://localhost:3000/user/${id}`,{
+          method:"GET",
+
+        })
+        const data = await user.json()
+        document.getElementById("username").value = data.username
+        document.getElementById('age').value = data.age
+        userid = data._id
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+
+    async function updateuser(){
+        try {
+
+          const response = await fetch(`http://localhost:3000/update/${userid}`,{
+            method:"PUT",
+            body:JSON.stringify({name:document.getElementById("username").value,age:document.getElementById("age").value}),
+            headers:{
+              "Content-Type":"application/json"
+            }
+            ,}
+          )
+
+          console.log(response.json())
+
+          window.location.reload()
+        } catch (error) {
+          console.log(error)
+        }
+    }
+
+
+ async function deleteuser(params) {
+    try {
+      const deleteUser = await fetch(`http://localhost:3000/delete/${params}`,{
+        method:"DELETE",
+        headers:{
+          "Content-Type":"application/json"
+        }
+
+      })
+      console.log(deleteUser.json())
+      window.location.reload()
+    } catch (error) {
+      console.log(error)
+    }
+ }
+  </script>
 </html>
