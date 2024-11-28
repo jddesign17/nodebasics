@@ -17,6 +17,12 @@ app.get("/get", (req, res) => {
 });
 
 
+
+app.get("/data",(req,res)=>{
+  res.send({name:"vishal"})
+})
+
+
 app.listen(3000, () => {
   console.log("server started");
 });

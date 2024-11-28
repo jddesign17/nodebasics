@@ -7,16 +7,45 @@
   </head>
   <body>
     <h2>user side</h2>
+    <div id="details">
 
-    <div id="details"></div>
+    </div>
+    <div id="details2">
+
+    </div>
     <script>
-      const details = document.getElementById("details");
+     
+
+     const details =document.getElementById("details")
+     const details2 =document.getElementById("details2")
+    
 
       async function getData() {
         const res = await fetch("http://localhost:3000/get");
         const data = await res.json();
+        
+        
+        data.map((item,index)=>{
+          details.innerHTML += `<h2>Name : ${item.name}</h2>
+          <p>Age : ${item.age}</p>
+          <p>Phone : ${item.phone}</p>
+          `
+        })
+       
+      }
+
+
+      async function getData2() {
+        const res = await fetch("http://localhost:3000/data");
+        const data = await res.json();
+        
+        details2.innerHTML += `<h2>Name : ${data.name}</h2> `
+        console.log("single data ",data)
+       
       }
       getData();
+
+      getData2()
     </script>
   </body>
 </html>
